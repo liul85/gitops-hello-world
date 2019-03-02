@@ -6,6 +6,12 @@ services:
 before_install:
 - openssl aes-256-cbc -K $encrypted_8aba50e08a7d_key -iv $encrypted_8aba50e08a7d_iv
   -in gitops.json.enc -out gitops.json -d
-script:
-- docker build -t asia.gcr.io/gitops/gitops-hello-world:${TRAVIS_COMMIT} .
-- docker images
+jobs:
+  include:
+    - stage: build image and push to GCR
+      script:
+        - docker build -t asia.gcr.io/gitops/gitops-hello-world:${TRAVIS_COMMIT} .
+        - docker images
+    - stage: trigger k8s config update
+      script: echo 'done!'
+
