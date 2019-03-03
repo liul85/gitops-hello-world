@@ -20,10 +20,9 @@ jobs:
         - gcloud auth activate-service-account --key-file gitops.json
         - gcloud config set project gitops-233223
       script:
-        - gcloud auth configure-docker
         - docker build -t asia.gcr.io/gitops-233223/gitops-hello-world:${TRAVIS_COMMIT} .
         - docker images
-        - docker push asia.gcr.io/gitops-233223/gitops-hello-world:${TRAVIS_COMMIT}
+        - gcloud docker -- push asia.gcr.io/gitops-233223/gitops-hello-world:${TRAVIS_COMMIT}
     - stage: trigger k8s config update
       script: echo "done!"
 
